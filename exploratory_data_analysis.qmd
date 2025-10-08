@@ -238,3 +238,70 @@ ggplot(data = combined_data, aes(x = studytime, fill = sex)) +
        subtitle = "Of Portuguese Student Data Grouped by Study Time and Sex") + 
   scale_fill_discrete("Sex")
 ```
+
+### Numeric Variables
+
+#### Find Measures of Center and Spread
+```{r}
+# find the mean and standard deviation of student's ages, G1 math and G3 math scores
+combined_data |> 
+  summarize(
+    mean_age = mean(age),
+    sd_age = sd(age),
+    mean_G1_math = mean(G1.x),
+    sd_G1_math = sd(G1.x),
+    mean_G3_math = mean(G3.x),
+    sd_G3_math = sd(G3.x)
+)
+
+# find the mean and standard deviation of student's ages, G1 math and G3 math scores, subsetting to only include students with more than 3 abscences in math
+combined_data |> 
+  filter(absences.x > 3) |> 
+  summarize(
+    mean_age = mean(age),
+    sd_age = sd(age),
+    mean_G1_math = mean(G1.x),
+    sd_G1_math = sd(G1.x),
+    mean_G3_math = mean(G3.x),
+    sd_G3_math = sd(G3.x)
+)
+
+# find the mean and standard deviation of student's ages, G1 math and G3 math scores across sex as a grouping variable
+combined_data |> 
+  group_by(sex) |> 
+  summarize(
+    mean_age = mean(age),
+    sd_age = sd(age),
+    mean_G1_math = mean(G1.x),
+    sd_G1_math = sd(G1.x),
+    mean_G3_math = mean(G3.x),
+    sd_G3_math = sd(G3.x)
+)
+
+# find the mean and standard deviation of student's ages, G1 math and G3 math scores across sex and study time as a grouping variable
+combined_data |> 
+  group_by(sex, studytime) |> 
+  summarize(
+    mean_age = mean(age),
+    sd_age = sd(age),
+    mean_G1_math = mean(G1.x),
+    sd_G1_math = sd(G1.x),
+    mean_G3_math = mean(G3.x),
+    sd_G3_math = sd(G3.x)
+)
+```
+
+#### Correlation Matrix
+
+```{r}
+# create a correlation matrix between all numeric variables
+combined_data |> 
+  select(age, absences.x, absences.y, G1.x, G1.y, G2.x, G2.y, G3.x, G3.y) |> 
+  cor(use = "pairwise.complete.obs")
+```
+
+#### Numeric Plots
+
+```{r}
+
+```
