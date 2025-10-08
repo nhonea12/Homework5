@@ -329,8 +329,10 @@ dbl (16): age, Medu, Fedu, traveltime, studytime, failures, famrel, freetime...
 </div>
 </div>
 <p>There are no missing data values in our data set!</p>
-<section id="one-way-contingency-tables" class="level3">
-<h3 class="anchored" data-anchor-id="one-way-contingency-tables">One-Way Contingency Tables</h3>
+<section id="categorical-variables" class="level3">
+<h3 class="anchored" data-anchor-id="categorical-variables">Categorical Variables</h3>
+<section id="one-way-contingency-tables" class="level4">
+<h4 class="anchored" data-anchor-id="one-way-contingency-tables">One-Way Contingency Tables</h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create one-way contingency tables of the combined data based on the factor variables</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on sex variable</span></span>
@@ -373,8 +375,8 @@ Female   Male
 </div>
 <p>Based on the table, 40 of the students in our data go out with friends a very high amount.</p>
 </section>
-<section id="two-way-contingency-tables" class="level3">
-<h3 class="anchored" data-anchor-id="two-way-contingency-tables">Two-Way Contingency Tables</h3>
+<section id="two-way-contingency-tables" class="level4">
+<h4 class="anchored" data-anchor-id="two-way-contingency-tables">Two-Way Contingency Tables</h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create two-way contingency tables of the combined data based on the factor variables</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on sex and studytime variables</span></span>
@@ -447,8 +449,8 @@ Female   Male
 </div>
 <p>Based on the table, 29 of the students in our data are in a romantic relationship and go out with friends a low (but not very low) amount.</p>
 </section>
-<section id="three-way-contingency-tables" class="level3">
-<h3 class="anchored" data-anchor-id="three-way-contingency-tables">Three-Way Contingency Tables</h3>
+<section id="three-way-contingency-tables" class="level4">
+<h4 class="anchored" data-anchor-id="three-way-contingency-tables">Three-Way Contingency Tables</h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create three-way contingency tables of the combined data based on the factor variables</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on sex, studytime, and romantic variables</span></span>
@@ -604,10 +606,92 @@ Female   Male
 </div>
 <p>Based on the table, 31 of the students in our data study 2 to 5 hours per week, are not in a romantic relationship, and go out with friends a high (but not very high) amount of the time.</p>
 </section>
-<section id="conditional-two_way-tables" class="level3">
-<h3 class="anchored" data-anchor-id="conditional-two_way-tables">Conditional Two_way Tables</h3>
+<section id="conditional-two-way-tables" class="level4">
+<h4 class="anchored" data-anchor-id="conditional-two-way-tables">Conditional Two-Way Tables</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a conditional two-way table by subsetting using filter and then table()</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="co"># table of sex and romantic variables conditioned on goout being at the "High" level</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>only_high_goout <span class="ot">&lt;-</span> combined_data <span class="sc">|&gt;</span> </span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(goout <span class="sc">==</span> <span class="st">"High"</span>)</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(only_high_goout<span class="sc">$</span>sex, only_high_goout<span class="sc">$</span>romantic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        
+         No Yes
+  Female 28  11
+  Male   23   4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a conditional two-way table by subsetting a three-way table</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="co"># create the same table as above</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>cond_two_way <span class="ot">&lt;-</span> <span class="fu">table</span>(combined_data<span class="sc">$</span>sex, combined_data<span class="sc">$</span>romantic, combined_data<span class="sc">$</span>goout)</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>cond_two_way[, , <span class="st">"High"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        
+         No Yes
+  Female 28  11
+  Male   23   4</code></pre>
+</div>
+</div>
+</section>
+<section id="two-way-contingency-table-with-dplyr" class="level4">
+<h4 class="anchored" data-anchor-id="two-way-contingency-table-with-dplyr">Two-Way Contingency Table with dplyr</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a two-way contingency table of the combined data on the sex and studytime variables using group_by() and summarize() from dplyr</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>combined_data <span class="sc">|&gt;</span> </span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex, studytime) <span class="sc">|&gt;</span> </span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> studytime, <span class="at">values_from =</span> count) <span class="co"># pivot_wider() makes the table look similar to the one created with the table() function</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'sex'. You can override using the `.groups`
+argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+# Groups:   sex [2]
+  sex    `&lt;2 hours` `2-5 hours` `5-10 hours` `&gt;10 hours`
+  &lt;fct&gt;       &lt;int&gt;       &lt;int&gt;        &lt;int&gt;       &lt;int&gt;
+1 Female         25          91           42          16
+2 Male           56          66           14          10</code></pre>
+</div>
+</div>
+</section>
+<section id="stacked-and-side-by-side-bar-graphs" class="level4">
+<h4 class="anchored" data-anchor-id="stacked-and-side-by-side-bar-graphs">Stacked and Side-by-Side Bar Graphs</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a stacked bar plot based on sex and studytime</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> combined_data, <span class="fu">aes</span>(<span class="at">x =</span> studytime, <span class="at">fill =</span> sex)) <span class="sc">+</span> </span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span> </span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Study Time"</span>, </span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Count"</span>,</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Stacked Bar Graph"</span>,</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Of Portuguese Student Data Grouped by Study Time and Sex"</span>) <span class="sc">+</span> </span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_discrete</span>(<span class="st">"Sex"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="exploratory_data_analysis_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a side-by-side bar graph based on the same variables</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> combined_data, <span class="fu">aes</span>(<span class="at">x =</span> studytime, <span class="at">fill =</span> sex)) <span class="sc">+</span> </span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span> </span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Study Time"</span>, </span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Count"</span>,</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Side-by-Side Bar Graph"</span>,</span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Of Portuguese Student Data Grouped by Study Time and Sex"</span>) <span class="sc">+</span> </span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_discrete</span>(<span class="st">"Sex"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="exploratory_data_analysis_files/figure-html/unnamed-chunk-20-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
+</section>
 </section>
 </section>
 </section>

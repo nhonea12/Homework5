@@ -84,7 +84,9 @@ colSums(is.na(combined_data))
 
 There are no missing data values in our data set!
 
-### One-Way Contingency Tables
+### Categorical Variables
+
+#### One-Way Contingency Tables
 
 ```{r}
 # create one-way contingency tables of the combined data based on the factor variables
@@ -115,7 +117,7 @@ table(combined_data$goout)
 
 Based on the table, 40 of the students in our data go out with friends a very high amount.
 
-### Two-Way Contingency Tables
+#### Two-Way Contingency Tables
 ```{r}
 # create two-way contingency tables of the combined data based on the factor variables
 # contingency table on sex and studytime variables
@@ -159,7 +161,7 @@ table(combined_data$romantic, combined_data$goout)
 
 Based on the table, 29 of the students in our data are in a romantic relationship and go out with friends a low (but not very low) amount.
 
-### Three-Way Contingency Tables
+#### Three-Way Contingency Tables
 ```{r}
 # create three-way contingency tables of the combined data based on the factor variables
 # contingency table on sex, studytime, and romantic variables
@@ -189,8 +191,50 @@ table(combined_data$studytime, combined_data$romantic, combined_data$goout)
 
 Based on the table, 31 of the students in our data study 2 to 5 hours per week, are not in a romantic relationship, and go out with friends a high (but not very high) amount of the time.
 
-### Conditional Two_way Tables
+#### Conditional Two-Way Tables
 
 ```{r}
+# create a conditional two-way table by subsetting using filter and then table()
+# table of sex and romantic variables conditioned on goout being at the "High" level
+only_high_goout <- combined_data |> 
+  filter(goout == "High")
 
+table(only_high_goout$sex, only_high_goout$romantic)
+
+# create a conditional two-way table by subsetting a three-way table
+# create the same table as above
+cond_two_way <- table(combined_data$sex, combined_data$romantic, combined_data$goout)
+cond_two_way[, , "High"]
+```
+
+#### Two-Way Contingency Table with dplyr
+
+```{r}
+# create a two-way contingency table of the combined data on the sex and studytime variables using group_by() and summarize() from dplyr
+combined_data |> 
+  group_by(sex, studytime) |> 
+  summarise(count = n()) |> 
+  pivot_wider(names_from = studytime, values_from = count) # pivot_wider() makes the table look similar to the one created with the table() function
+```
+
+#### Stacked and Side-by-Side Bar Graphs
+```{r}
+# create a stacked bar plot based on sex and studytime
+ggplot(data = combined_data, aes(x = studytime, fill = sex)) + 
+  geom_bar() + 
+  labs(x = "Study Time", 
+       y = "Count",
+       title = "Stacked Bar Graph",
+       subtitle = "Of Portuguese Student Data Grouped by Study Time and Sex") + 
+  scale_fill_discrete("Sex")
+
+
+# create a side-by-side bar graph based on the same variables
+ggplot(data = combined_data, aes(x = studytime, fill = sex)) + 
+  geom_bar(position = "dodge") + 
+  labs(x = "Study Time", 
+       y = "Count",
+       title = "Side-by-Side Bar Graph",
+       subtitle = "Of Portuguese Student Data Grouped by Study Time and Sex") + 
+  scale_fill_discrete("Sex")
 ```
