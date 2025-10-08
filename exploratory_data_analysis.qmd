@@ -1,0 +1,11 @@
+---
+title: "Homework 5"
+author: "Nathan Honea"
+format: html
+---
+
+## Task 1
+
+```{r}
+
+```
