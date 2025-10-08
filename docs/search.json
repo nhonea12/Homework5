@@ -1,0 +1,16 @@
+[
+  {
+    "objectID": "exploratory_data_analysis.html",
+    "href": "exploratory_data_analysis.html",
+    "title": "Homework 5",
+    "section": "",
+    "text": "library(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.2     ✔ tibble    3.3.0\n✔ lubridate 1.9.4     ✔ tidyr     1.3.1\n✔ purrr     1.1.0     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nd1 &lt;- read.table(\"student+performance/student/student-mat.csv\", sep = \";\", header = TRUE)\n\nd2 &lt;- read.table(\"student+performance/student/student-por.csv\", sep=\";\", header = TRUE)\n\nd3 &lt;- merge(d1, d2, by = c(\"school\", \"sex\", \"age\", \"address\", \"famsize\", \"Pstatus\", \"Medu\", \"Fedu\", \"Mjob\", \"Fjob\", \"reason\", \"nursery\", \"internet\"))\n\nprint(nrow(d3)) # 382 students\n\n[1] 382"
+  },
+  {
+    "objectID": "exploratory_data_analysis.html#task-1",
+    "href": "exploratory_data_analysis.html#task-1",
+    "title": "Homework 5",
+    "section": "",
+    "text": "library(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.2     ✔ tibble    3.3.0\n✔ lubridate 1.9.4     ✔ tidyr     1.3.1\n✔ purrr     1.1.0     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nd1 &lt;- read.table(\"student+performance/student/student-mat.csv\", sep = \";\", header = TRUE)\n\nd2 &lt;- read.table(\"student+performance/student/student-por.csv\", sep=\";\", header = TRUE)\n\nd3 &lt;- merge(d1, d2, by = c(\"school\", \"sex\", \"age\", \"address\", \"famsize\", \"Pstatus\", \"Medu\", \"Fedu\", \"Mjob\", \"Fjob\", \"reason\", \"nursery\", \"internet\"))\n\nprint(nrow(d3)) # 382 students\n\n[1] 382"
+  }
+]
