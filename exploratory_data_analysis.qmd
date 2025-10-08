@@ -8,7 +8,7 @@ format: html
 
 ```{r}
 library(tidyverse)
-
+# use the code provided
 d1 <- read.table("student+performance/student/student-mat.csv", sep = ";", header = TRUE)
 
 d2 <- read.table("student+performance/student/student-por.csv", sep=";", header = TRUE)
@@ -16,4 +16,20 @@ d2 <- read.table("student+performance/student/student-por.csv", sep=";", header 
 d3 <- merge(d1, d2, by = c("school", "sex", "age", "address", "famsize", "Pstatus", "Medu", "Fedu", "Mjob", "Fjob", "reason", "nursery", "internet"))
 
 print(nrow(d3)) # 382 students
+
+
+# use tidyverse functions
+mat_data <- read_csv2("student+performance/student/student-mat.csv")
+
+por_data <- read_csv2("student+performance/student/student-por.csv")
+
+combined_data_1 <- inner_join(mat_data, 
+                            por_data, 
+                            by = c("school", "sex", "age", "address", "famsize", "Pstatus", "Medu", "Fedu", "Mjob", "Fjob", "reason", "nursery", "internet"))
+
+combined_data <- inner_join(mat_data, 
+                            por_data, 
+                            by = c("school", "sex", "age", "address", "famsize", "Pstatus", "Medu", "Fedu", "Mjob", "Fjob", "reason", "guardian", "traveltime", "studytime", "failures", "schoolsup", "famsup", "activities", "nursery", "higher", "internet", "romantic", "famrel", "freetime", "goout", "Dalc", "Walc", "health"))
+
+print(nrow(combined_data)) 
 ```
