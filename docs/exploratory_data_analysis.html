@@ -142,8 +142,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="task-1" class="level2">
-<h2 class="anchored" data-anchor-id="task-1">Task 1</h2>
+<section id="task-1" class="level1">
+<h1>Task 1</h1>
+<section id="read-in-data-and-modify" class="level2">
+<h2 class="anchored" data-anchor-id="read-in-data-and-modify">Read in Data and Modify</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -200,6 +202,9 @@ dbl (16): age, Medu, Fedu, traveltime, studytime, failures, famrel, freetime...
 ℹ If a many-to-many relationship is expected, set `relationship =
   "many-to-many"` to silence this warning.</code></pre>
 </div>
+</div>
+<p>We get a warning when combining the data via <code>inner_join()</code> on only these variables, say there is an unexpected many-to-many relationship between our tibbles.</p>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>combined_data <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(mat_data, </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                            por_data, </span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"school"</span>, <span class="st">"sex"</span>, <span class="st">"age"</span>, <span class="st">"address"</span>, <span class="st">"famsize"</span>, <span class="st">"Pstatus"</span>, <span class="st">"Medu"</span>, <span class="st">"Fedu"</span>, <span class="st">"Mjob"</span>, <span class="st">"Fjob"</span>, <span class="st">"reason"</span>, <span class="st">"guardian"</span>, <span class="st">"traveltime"</span>, <span class="st">"studytime"</span>, <span class="st">"failures"</span>, <span class="st">"schoolsup"</span>, <span class="st">"famsup"</span>, <span class="st">"activities"</span>, <span class="st">"nursery"</span>, <span class="st">"higher"</span>, <span class="st">"internet"</span>, <span class="st">"romantic"</span>, <span class="st">"famrel"</span>, <span class="st">"freetime"</span>, <span class="st">"goout"</span>, <span class="st">"Dalc"</span>, <span class="st">"Walc"</span>, <span class="st">"health"</span>))</span>
@@ -208,9 +213,403 @@ dbl (16): age, Medu, Fedu, traveltime, studytime, failures, famrel, freetime...
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 320</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># change the sex, studytime, romantic, and goout variables to factors using the mutate function in all of the data sets</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>mat_data <span class="ot">&lt;-</span> mat_data <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sex =</span> <span class="fu">factor</span>(sex, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"F"</span>, <span class="st">"M"</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Female"</span>, <span class="st">"Male"</span>)),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">studytime =</span> <span class="fu">factor</span>(studytime, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"&lt;2 hours"</span>, <span class="st">"2-5 hours"</span>, <span class="st">"5-10 hours"</span>, <span class="st">"&gt;10 hours"</span>)),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">romantic =</span> <span class="fu">factor</span>(romantic, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>)),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">goout =</span> <span class="fu">factor</span>(goout, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Very Low"</span>, <span class="st">"Low"</span>, <span class="st">"Medium"</span>, <span class="st">"High"</span>, <span class="st">"Very High"</span>))</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>por_data <span class="ot">&lt;-</span> por_data <span class="sc">|&gt;</span> </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">sex =</span> <span class="fu">factor</span>(sex, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"F"</span>, <span class="st">"M"</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Female"</span>, <span class="st">"Male"</span>)),</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">studytime =</span> <span class="fu">factor</span>(studytime, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"&lt;2 hours"</span>, <span class="st">"2-5 hours"</span>, <span class="st">"5-10 hours"</span>, <span class="st">"&gt;10 hours"</span>)),</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">romantic =</span> <span class="fu">factor</span>(romantic, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>)),</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">goout =</span> <span class="fu">factor</span>(goout, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Very Low"</span>, <span class="st">"Low"</span>, <span class="st">"Medium"</span>, <span class="st">"High"</span>, <span class="st">"Very High"</span>))</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>combined_data <span class="ot">&lt;-</span> combined_data <span class="sc">|&gt;</span> </span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">sex =</span> <span class="fu">factor</span>(sex, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"F"</span>, <span class="st">"M"</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Female"</span>, <span class="st">"Male"</span>)),</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">studytime =</span> <span class="fu">factor</span>(studytime, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"&lt;2 hours"</span>, <span class="st">"2-5 hours"</span>, <span class="st">"5-10 hours"</span>, <span class="st">"&gt;10 hours"</span>)),</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">romantic =</span> <span class="fu">factor</span>(romantic, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>)),</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">goout =</span> <span class="fu">factor</span>(goout, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Very Low"</span>, <span class="st">"Low"</span>, <span class="st">"Medium"</span>, <span class="st">"High"</span>, <span class="st">"Very High"</span>))</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+</section>
+<section id="task-2" class="level1">
+<h1>Task 2</h1>
+<section id="summarize-the-data-very-basic-eda" class="level2">
+<h2 class="anchored" data-anchor-id="summarize-the-data-very-basic-eda">Summarize the Data (Very Basic EDA)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># look at how the combined data is stored</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>combined_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 320 × 38
+   school sex      age address famsize Pstatus  Medu  Fedu Mjob     Fjob  reason
+   &lt;chr&gt;  &lt;fct&gt;  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; 
+ 1 GP     Female    18 U       GT3     A           4     4 at_home  teac… course
+ 2 GP     Female    17 U       GT3     T           1     1 at_home  other course
+ 3 GP     Female    15 U       GT3     T           4     2 health   serv… home  
+ 4 GP     Female    16 U       GT3     T           3     3 other    other home  
+ 5 GP     Male      16 U       LE3     T           4     3 services other reput…
+ 6 GP     Male      16 U       LE3     T           2     2 other    other home  
+ 7 GP     Female    17 U       GT3     A           4     4 other    teac… home  
+ 8 GP     Male      15 U       LE3     A           3     2 services other home  
+ 9 GP     Male      15 U       GT3     T           3     4 other    other home  
+10 GP     Female    15 U       GT3     T           4     4 teacher  heal… reput…
+# ℹ 310 more rows
+# ℹ 27 more variables: guardian &lt;chr&gt;, traveltime &lt;dbl&gt;, studytime &lt;fct&gt;,
+#   failures &lt;dbl&gt;, schoolsup &lt;chr&gt;, famsup &lt;chr&gt;, paid.x &lt;chr&gt;,
+#   activities &lt;chr&gt;, nursery &lt;chr&gt;, higher &lt;chr&gt;, internet &lt;chr&gt;,
+#   romantic &lt;fct&gt;, famrel &lt;dbl&gt;, freetime &lt;dbl&gt;, goout &lt;fct&gt;, Dalc &lt;dbl&gt;,
+#   Walc &lt;dbl&gt;, health &lt;dbl&gt;, absences.x &lt;dbl&gt;, G1.x &lt;dbl&gt;, G2.x &lt;dbl&gt;,
+#   G3.x &lt;dbl&gt;, paid.y &lt;chr&gt;, absences.y &lt;dbl&gt;, G1.y &lt;dbl&gt;, G2.y &lt;dbl&gt;, …</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(combined_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [320 × 38] (S3: tbl_df/tbl/data.frame)
+ $ school    : chr [1:320] "GP" "GP" "GP" "GP" ...
+ $ sex       : Factor w/ 2 levels "Female","Male": 1 1 1 1 2 2 1 2 2 1 ...
+ $ age       : num [1:320] 18 17 15 16 16 16 17 15 15 15 ...
+ $ address   : chr [1:320] "U" "U" "U" "U" ...
+ $ famsize   : chr [1:320] "GT3" "GT3" "GT3" "GT3" ...
+ $ Pstatus   : chr [1:320] "A" "T" "T" "T" ...
+ $ Medu      : num [1:320] 4 1 4 3 4 2 4 3 3 4 ...
+ $ Fedu      : num [1:320] 4 1 2 3 3 2 4 2 4 4 ...
+ $ Mjob      : chr [1:320] "at_home" "at_home" "health" "other" ...
+ $ Fjob      : chr [1:320] "teacher" "other" "services" "other" ...
+ $ reason    : chr [1:320] "course" "course" "home" "home" ...
+ $ guardian  : chr [1:320] "mother" "father" "mother" "father" ...
+ $ traveltime: num [1:320] 2 1 1 1 1 1 2 1 1 1 ...
+ $ studytime : Factor w/ 4 levels "&lt;2 hours","2-5 hours",..: 2 2 3 2 2 2 2 2 2 2 ...
+ $ failures  : num [1:320] 0 0 0 0 0 0 0 0 0 0 ...
+ $ schoolsup : chr [1:320] "yes" "no" "no" "no" ...
+ $ famsup    : chr [1:320] "no" "yes" "yes" "yes" ...
+ $ paid.x    : chr [1:320] "no" "no" "yes" "yes" ...
+ $ activities: chr [1:320] "no" "no" "yes" "no" ...
+ $ nursery   : chr [1:320] "yes" "no" "yes" "yes" ...
+ $ higher    : chr [1:320] "yes" "yes" "yes" "yes" ...
+ $ internet  : chr [1:320] "no" "yes" "yes" "no" ...
+ $ romantic  : Factor w/ 2 levels "No","Yes": 1 1 2 1 1 1 1 1 1 1 ...
+ $ famrel    : num [1:320] 4 5 3 4 5 4 4 4 5 3 ...
+ $ freetime  : num [1:320] 3 3 2 3 4 4 1 2 5 3 ...
+ $ goout     : Factor w/ 5 levels "Very Low","Low",..: 4 3 2 2 2 4 4 2 1 3 ...
+ $ Dalc      : num [1:320] 1 1 1 1 1 1 1 1 1 1 ...
+ $ Walc      : num [1:320] 1 1 1 2 2 1 1 1 1 2 ...
+ $ health    : num [1:320] 3 3 5 5 5 3 1 1 5 2 ...
+ $ absences.x: num [1:320] 6 4 2 4 10 0 6 0 0 0 ...
+ $ G1.x      : num [1:320] 5 5 15 6 15 12 6 16 14 10 ...
+ $ G2.x      : num [1:320] 6 5 14 10 15 12 5 18 15 8 ...
+ $ G3.x      : num [1:320] 6 6 15 10 15 11 6 19 15 9 ...
+ $ paid.y    : chr [1:320] "no" "no" "no" "no" ...
+ $ absences.y: num [1:320] 4 2 0 0 6 0 2 0 0 2 ...
+ $ G1.y      : num [1:320] 0 9 14 11 12 13 10 15 12 14 ...
+ $ G2.y      : num [1:320] 11 11 14 13 12 12 13 16 12 14 ...
+ $ G3.y      : num [1:320] 11 11 14 13 13 13 13 17 13 14 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># look at the number of missing values in each variable of the combined data</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(combined_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    school        sex        age    address    famsize    Pstatus       Medu 
+         0          0          0          0          0          0          0 
+      Fedu       Mjob       Fjob     reason   guardian traveltime  studytime 
+         0          0          0          0          0          0          0 
+  failures  schoolsup     famsup     paid.x activities    nursery     higher 
+         0          0          0          0          0          0          0 
+  internet   romantic     famrel   freetime      goout       Dalc       Walc 
+         0          0          0          0          0          0          0 
+    health absences.x       G1.x       G2.x       G3.x     paid.y absences.y 
+         0          0          0          0          0          0          0 
+      G1.y       G2.y       G3.y 
+         0          0          0 </code></pre>
+</div>
+</div>
+<p>There are no missing data values in our data set!</p>
+<section id="one-way-contingency-tables" class="level3">
+<h3 class="anchored" data-anchor-id="one-way-contingency-tables">One-Way Contingency Tables</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create one-way contingency tables of the combined data based on the factor variables</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on sex variable</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(combined_data<span class="sc">$</span>sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Female   Male 
+   174    146 </code></pre>
+</div>
+</div>
+<p>Based on the table, 146 of the students in our data are male.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on studytime variable</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(combined_data<span class="sc">$</span>studytime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  &lt;2 hours  2-5 hours 5-10 hours  &gt;10 hours 
+        81        157         56         26 </code></pre>
+</div>
+</div>
+<p>Based on the table, 157 of the students in our data study between 2 and 5 hours per week.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on romantic variable</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(combined_data<span class="sc">$</span>romantic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ No Yes 
+221  99 </code></pre>
+</div>
+</div>
+<p>Based on the table, 99 of the students in our data are in a romantic relationship.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on goout variable</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(combined_data<span class="sc">$</span>goout)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Very Low       Low    Medium      High Very High 
+       19        86       109        66        40 </code></pre>
+</div>
+</div>
+<p>Based on the table, 40 of the students in our data go out with friends a very high amount.</p>
+</section>
+<section id="two-way-contingency-tables" class="level3">
+<h3 class="anchored" data-anchor-id="two-way-contingency-tables">Two-Way Contingency Tables</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create two-way contingency tables of the combined data based on the factor variables</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on sex and studytime variables</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(combined_data<span class="sc">$</span>sex, combined_data<span class="sc">$</span>studytime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        
+         &lt;2 hours 2-5 hours 5-10 hours &gt;10 hours
+  Female       25        91         42        16
+  Male         56        66         14        10</code></pre>
+</div>
+</div>
+<p>Based on the table, 42 of the students in our data are females who study 5 to 10 hours per week.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on sex and romantic variables</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(combined_data<span class="sc">$</span>sex, combined_data<span class="sc">$</span>romantic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        
+          No Yes
+  Female 116  58
+  Male   105  41</code></pre>
+</div>
+</div>
+<p>Based on the table, 105 of the students in our data are males who are not in a romantic relationship.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on sex and goout variables</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(combined_data<span class="sc">$</span>sex, combined_data<span class="sc">$</span>goout)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        
+         Very Low Low Medium High Very High
+  Female       10  44     62   39        19
+  Male          9  42     47   27        21</code></pre>
+</div>
+</div>
+<p>Based on the table, 39 of the students in our data are females who go out with their friends a high (but not very high) amount.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on studytime and romantic variables</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(combined_data<span class="sc">$</span>studytime, combined_data<span class="sc">$</span>romantic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            
+              No Yes
+  &lt;2 hours    61  20
+  2-5 hours  105  52
+  5-10 hours  34  22
+  &gt;10 hours   21   5</code></pre>
+</div>
+</div>
+<p>Based on the table, 22 of the students in our data are in romantic relationships and study 5 to 10 hours per week.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on studytime and goout variables</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(combined_data<span class="sc">$</span>studytime, combined_data<span class="sc">$</span>goout)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            
+             Very Low Low Medium High Very High
+  &lt;2 hours         10  21     22   15        13
+  2-5 hours         8  39     50   41        19
+  5-10 hours        0  18     27    7         4
+  &gt;10 hours         1   8     10    3         4</code></pre>
+</div>
+</div>
+<p>Based on the table, 41 of the students in our data go out with their friends a high (but not very high) amount and study 2 to 5 hours per week.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on romantic and goout variables</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(combined_data<span class="sc">$</span>romantic, combined_data<span class="sc">$</span>goout)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+      Very Low Low Medium High Very High
+  No        15  57     73   51        25
+  Yes        4  29     36   15        15</code></pre>
+</div>
+</div>
+<p>Based on the table, 29 of the students in our data are in a romantic relationship and go out with friends a low (but not very low) amount.</p>
+</section>
+<section id="three-way-contingency-tables" class="level3">
+<h3 class="anchored" data-anchor-id="three-way-contingency-tables">Three-Way Contingency Tables</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create three-way contingency tables of the combined data based on the factor variables</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on sex, studytime, and romantic variables</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(combined_data<span class="sc">$</span>sex, combined_data<span class="sc">$</span>studytime, combined_data<span class="sc">$</span>romantic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>, ,  = No
+
+        
+         &lt;2 hours 2-5 hours 5-10 hours &gt;10 hours
+  Female       17        59         27        13
+  Male         44        46          7         8
+
+, ,  = Yes
+
+        
+         &lt;2 hours 2-5 hours 5-10 hours &gt;10 hours
+  Female        8        32         15         3
+  Male         12        20          7         2</code></pre>
+</div>
+</div>
+<p>Based on the table, 27 of the students in our data are females who study 5 to 10 hours per week and are not in a romantic relationship.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on sex, studytime, and goout variables</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(combined_data<span class="sc">$</span>sex, combined_data<span class="sc">$</span>studytime, combined_data<span class="sc">$</span>goout)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>, ,  = Very Low
+
+        
+         &lt;2 hours 2-5 hours 5-10 hours &gt;10 hours
+  Female        6         3          0         1
+  Male          4         5          0         0
+
+, ,  = Low
+
+        
+         &lt;2 hours 2-5 hours 5-10 hours &gt;10 hours
+  Female        4        23         12         5
+  Male         17        16          6         3
+
+, ,  = Medium
+
+        
+         &lt;2 hours 2-5 hours 5-10 hours &gt;10 hours
+  Female        4        30         21         7
+  Male         18        20          6         3
+
+, ,  = High
+
+        
+         &lt;2 hours 2-5 hours 5-10 hours &gt;10 hours
+  Female        7        25          6         1
+  Male          8        16          1         2
+
+, ,  = Very High
+
+        
+         &lt;2 hours 2-5 hours 5-10 hours &gt;10 hours
+  Female        4        10          3         2
+  Male          9         9          1         2</code></pre>
+</div>
+</div>
+<p>Based on the table, 30 of the students in our data are females who study 2 to 5 hours per week and go out with friends a medium amount.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on sex, romantic, and goout variables</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(combined_data<span class="sc">$</span>sex, combined_data<span class="sc">$</span>romantic, combined_data<span class="sc">$</span>goout)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>, ,  = Very Low
+
+        
+         No Yes
+  Female  6   4
+  Male    9   0
+
+, ,  = Low
+
+        
+         No Yes
+  Female 29  15
+  Male   28  14
+
+, ,  = Medium
+
+        
+         No Yes
+  Female 40  22
+  Male   33  14
+
+, ,  = High
+
+        
+         No Yes
+  Female 28  11
+  Male   23   4
+
+, ,  = Very High
+
+        
+         No Yes
+  Female 13   6
+  Male   12   9</code></pre>
+</div>
+</div>
+<p>Based on the table, 33 of the students in our data are males who are not in a romantic relationship and go out with friends a medium amount.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># contingency table on studytime, romantic, and goout variables</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(combined_data<span class="sc">$</span>studytime, combined_data<span class="sc">$</span>romantic, combined_data<span class="sc">$</span>goout)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>, ,  = Very Low
+
+            
+             No Yes
+  &lt;2 hours    8   2
+  2-5 hours   7   1
+  5-10 hours  0   0
+  &gt;10 hours   0   1
+
+, ,  = Low
+
+            
+             No Yes
+  &lt;2 hours   16   5
+  2-5 hours  20  19
+  5-10 hours 13   5
+  &gt;10 hours   8   0
+
+, ,  = Medium
+
+            
+             No Yes
+  &lt;2 hours   14   8
+  2-5 hours  37  13
+  5-10 hours 14  13
+  &gt;10 hours   8   2
+
+, ,  = High
+
+            
+             No Yes
+  &lt;2 hours   12   3
+  2-5 hours  31  10
+  5-10 hours  5   2
+  &gt;10 hours   3   0
+
+, ,  = Very High
+
+            
+             No Yes
+  &lt;2 hours   11   2
+  2-5 hours  10   9
+  5-10 hours  2   2
+  &gt;10 hours   2   2</code></pre>
+</div>
+</div>
+<p>Based on the table, 31 of the students in our data study 2 to 5 hours per week, are not in a romantic relationship, and go out with friends a high (but not very high) amount of the time.</p>
+</section>
+<section id="conditional-two_way-tables" class="level3">
+<h3 class="anchored" data-anchor-id="conditional-two_way-tables">Conditional Two_way Tables</h3>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->

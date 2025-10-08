@@ -2,12 +2,18 @@
 title: "Homework 5"
 author: "Nathan Honea"
 format: html
+editor_options: 
+  chunk_output_type: console
 ---
 
-## Task 1
+# Task 1
+
+## Read in Data and Modify
+
 
 ```{r}
 library(tidyverse)
+
 # use the code provided
 d1 <- read.table("student+performance/student/student-mat.csv", sep = ";", header = TRUE)
 
@@ -26,10 +32,165 @@ por_data <- read_csv2("student+performance/student/student-por.csv")
 combined_data_1 <- inner_join(mat_data, 
                             por_data, 
                             by = c("school", "sex", "age", "address", "famsize", "Pstatus", "Medu", "Fedu", "Mjob", "Fjob", "reason", "nursery", "internet"))
+```
 
+We get a warning when combining the data via `inner_join()` on only these variables, say there is an unexpected many-to-many relationship between our tibbles. 
+
+```{r}
 combined_data <- inner_join(mat_data, 
                             por_data, 
                             by = c("school", "sex", "age", "address", "famsize", "Pstatus", "Medu", "Fedu", "Mjob", "Fjob", "reason", "guardian", "traveltime", "studytime", "failures", "schoolsup", "famsup", "activities", "nursery", "higher", "internet", "romantic", "famrel", "freetime", "goout", "Dalc", "Walc", "health"))
 
 print(nrow(combined_data)) 
+
+# change the sex, studytime, romantic, and goout variables to factors using the mutate function in all of the data sets
+mat_data <- mat_data |> 
+  mutate(
+    sex = factor(sex, levels = c("F", "M"), labels = c("Female", "Male")),
+    studytime = factor(studytime, levels = c(1, 2, 3, 4), labels = c("<2 hours", "2-5 hours", "5-10 hours", ">10 hours")),
+    romantic = factor(romantic, levels = c("no", "yes"), labels = c("No", "Yes")),
+    goout = factor(goout, levels = c(1, 2, 3, 4, 5), labels = c("Very Low", "Low", "Medium", "High", "Very High"))
+  )
+
+por_data <- por_data |> 
+  mutate(
+    sex = factor(sex, levels = c("F", "M"), labels = c("Female", "Male")),
+    studytime = factor(studytime, levels = c(1, 2, 3, 4), labels = c("<2 hours", "2-5 hours", "5-10 hours", ">10 hours")),
+    romantic = factor(romantic, levels = c("no", "yes"), labels = c("No", "Yes")),
+    goout = factor(goout, levels = c(1, 2, 3, 4, 5), labels = c("Very Low", "Low", "Medium", "High", "Very High"))
+  )
+
+combined_data <- combined_data |> 
+  mutate(
+    sex = factor(sex, levels = c("F", "M"), labels = c("Female", "Male")),
+    studytime = factor(studytime, levels = c(1, 2, 3, 4), labels = c("<2 hours", "2-5 hours", "5-10 hours", ">10 hours")),
+    romantic = factor(romantic, levels = c("no", "yes"), labels = c("No", "Yes")),
+    goout = factor(goout, levels = c(1, 2, 3, 4, 5), labels = c("Very Low", "Low", "Medium", "High", "Very High"))
+  )
+```
+
+# Task 2
+
+## Summarize the Data (Very Basic EDA)
+
+```{r}
+# look at how the combined data is stored
+combined_data
+str(combined_data)
+
+# look at the number of missing values in each variable of the combined data
+colSums(is.na(combined_data))
+```
+
+There are no missing data values in our data set!
+
+### One-Way Contingency Tables
+
+```{r}
+# create one-way contingency tables of the combined data based on the factor variables
+# contingency table on sex variable
+table(combined_data$sex)
+```
+
+Based on the table, 146 of the students in our data are male.
+
+```{r}
+# contingency table on studytime variable
+table(combined_data$studytime)
+```
+
+Based on the table, 157 of the students in our data study between 2 and 5 hours per week.
+
+```{r}
+# contingency table on romantic variable
+table(combined_data$romantic)
+```
+
+Based on the table, 99 of the students in our data are in a romantic relationship.
+
+```{r}
+# contingency table on goout variable
+table(combined_data$goout)
+```
+
+Based on the table, 40 of the students in our data go out with friends a very high amount.
+
+### Two-Way Contingency Tables
+```{r}
+# create two-way contingency tables of the combined data based on the factor variables
+# contingency table on sex and studytime variables
+table(combined_data$sex, combined_data$studytime)
+```
+
+Based on the table, 42 of the students in our data are females who study 5 to 10 hours per week.
+
+```{r}
+# contingency table on sex and romantic variables
+table(combined_data$sex, combined_data$romantic)
+```
+
+Based on the table, 105 of the students in our data are males who are not in a romantic relationship.
+
+```{r}
+# contingency table on sex and goout variables
+table(combined_data$sex, combined_data$goout)
+```
+
+Based on the table, 39 of the students in our data are females who go out with their friends a high (but not very high) amount.
+
+```{r}
+# contingency table on studytime and romantic variables
+table(combined_data$studytime, combined_data$romantic)
+```
+
+Based on the table, 22 of the students in our data are in romantic relationships and study 5 to 10 hours per week.
+
+```{r}
+# contingency table on studytime and goout variables
+table(combined_data$studytime, combined_data$goout)
+```
+
+Based on the table, 41 of the students in our data go out with their friends a high (but not very high) amount and study 2 to 5 hours per week.
+
+```{r}
+# contingency table on romantic and goout variables
+table(combined_data$romantic, combined_data$goout)
+```
+
+Based on the table, 29 of the students in our data are in a romantic relationship and go out with friends a low (but not very low) amount.
+
+### Three-Way Contingency Tables
+```{r}
+# create three-way contingency tables of the combined data based on the factor variables
+# contingency table on sex, studytime, and romantic variables
+table(combined_data$sex, combined_data$studytime, combined_data$romantic)
+```
+
+Based on the table, 27 of the students in our data are females who study 5 to 10 hours per week and are not in a romantic relationship.
+
+```{r}
+# contingency table on sex, studytime, and goout variables
+table(combined_data$sex, combined_data$studytime, combined_data$goout)
+```
+
+Based on the table, 30 of the students in our data are females who study 2 to 5 hours per week and go out with friends a medium amount.
+
+```{r}
+# contingency table on sex, romantic, and goout variables
+table(combined_data$sex, combined_data$romantic, combined_data$goout)
+```
+
+Based on the table, 33 of the students in our data are males who are not in a romantic relationship and go out with friends a medium amount.
+
+```{r}
+# contingency table on studytime, romantic, and goout variables
+table(combined_data$studytime, combined_data$romantic, combined_data$goout)
+```
+
+Based on the table, 31 of the students in our data study 2 to 5 hours per week, are not in a romantic relationship, and go out with friends a high (but not very high) amount of the time.
+
+### Conditional Two_way Tables
+
+```{r}
+
 ```
