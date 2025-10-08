@@ -253,7 +253,11 @@ combined_data |>
     mean_G3_math = mean(G3.x),
     sd_G3_math = sd(G3.x)
 )
+```
 
+The average score was higher on the first period math (G1) than on the final math grade (G3) in our data, although the final math grade varies more.
+
+```{r}
 # find the mean and standard deviation of student's ages, G1 math and G3 math scores, subsetting to only include students with more than 3 abscences in math
 combined_data |> 
   filter(absences.x > 3) |> 
@@ -265,7 +269,11 @@ combined_data |>
     mean_G3_math = mean(G3.x),
     sd_G3_math = sd(G3.x)
 )
+```
 
+When only considering students who missed class more than 3 times, the average first period math grade is lower than the total (11.1 < 11.3), but the average final grade among students who missed more than three classes is actually higher than the class average (11.2 > 11.0). Without doing a formal hypothesis test, based on the standard deviations and small differences in the means, the differences are likely not statistically significant.
+
+```{r}
 # find the mean and standard deviation of student's ages, G1 math and G3 math scores across sex as a grouping variable
 combined_data |> 
   group_by(sex) |> 
@@ -277,7 +285,11 @@ combined_data |>
     mean_G3_math = mean(G3.x),
     sd_G3_math = sd(G3.x)
 )
+```
 
+Grouping by age, it appears than male students do better on average than female students in math, both at the first period benchmark, and in the final grade.
+
+```{r}
 # find the mean and standard deviation of student's ages, G1 math and G3 math scores across sex and study time as a grouping variable
 combined_data |> 
   group_by(sex, studytime) |> 
@@ -291,6 +303,8 @@ combined_data |>
 )
 ```
 
+Grouping by both sex and study time, it seems as though  higher study times generally lead higher average course grades for both males and females, although there are some exceptions. For females, those who studied less than two hours had a slightly higher average math grades than those who studied 2-5 hours, both for the first period and the final grade (10.5 > 10.4 and 10.3 > 10.1). And for males, those who studied 5-10 hours had a higher grade on average than those who studied more than ten hours, both for the first period and the final grade (13.4 > 11.9 and 13.9 > 11.7)
+
 #### Correlation Matrix
 
 ```{r}
@@ -300,8 +314,196 @@ combined_data |>
   cor(use = "pairwise.complete.obs")
 ```
 
+Based on the correlation matrix, age has a weak correlation with all other variables, absences in one class have a moderate correlation with absences in the other (0.5638), and the grades at every period of each class have a moderate to strong correlation with the other grade variables, with math grade variables (ones ending in .x) having strong positive correlations with other math grades and moderate positive correlations with Portuguese grades, and the vice versa is true.
+
+
 #### Numeric Plots
 
 ```{r}
-
+# create a histogram, kernel density, and boxplot for G3 Portuguese and the G3 math scores grouped by sex
+# histograms
+# Portuguese final grades across sex
+ggplot(data = combined_data, aes(x = G1.y)) + 
+  geom_histogram(aes(fill = sex)) + 
+  labs(
+    x = "Portuguese Final Grade",
+    y = "Count", 
+    title = "Histogram of Portuguese Class Final Grades",
+    subtitle = "In Portuguese Student Data"
+  ) + 
+  scale_fill_discrete("Sex")
 ```
+
+Based on the histogram, the most students had a final Portuguese grade between 10 and 15. The highest scoring student was a female. The lowest scoring student was also a female.
+
+```{r}
+# Math final grades across sex
+ggplot(data = combined_data, aes(x = G1.x)) + 
+  geom_histogram(aes(fill = sex)) + 
+  labs(
+    x = "Math Final Grade",
+    y = "Count", 
+    title = "Histogram of Math Class Final Grades",
+    subtitle = "In Portuguese Student Data"
+  ) + 
+  scale_fill_discrete("Sex")
+```
+
+Based on the histogram, the most common final math grade for students was 10. The highest grades anyone got was 19 (out of 20), which it appears two males and one female achieved.
+
+```{r}
+# kernel densities
+# Portuguese final grades across sex
+ggplot(data = combined_data, aes(x = G1.y)) + 
+  geom_density(aes(fill = sex), alpha = 0.5) + 
+  labs(
+    x = "Portuguese Final Grade",
+    y = "Density", 
+    title = "Kernel Densities of Portuguese Class Final Grades",
+    subtitle = "In Portuguese Student Data"
+  ) + 
+  scale_fill_discrete("Sex")
+```
+
+Based on the kernel densities, it appears females had slightly better final grades in Portuguese than males on average, with the density curve of female scores centered slightly farther right than the center of males scores, and males having a larger left tail, indicating more low scores.
+
+```{r}
+# Math final grades across sex
+ggplot(data = combined_data, aes(x = G1.x)) + 
+  geom_density(aes(fill = sex), alpha = 0.5) + 
+  labs(
+    x = "Math Final Grade",
+    y = "Density", 
+    title = "Kernel Densities of Math Class Final Grades",
+    subtitle = "In Portuguese Student Data"
+  ) + 
+  scale_fill_discrete("Sex")
+```
+
+Based on the kernel densities, it appears there were more male students among the highest scoring the class for math, and the right tail of the distribution for males is larger than the distribution for females, indicating more high scoring males.
+
+```{r}
+# box plots
+# Portuguese final grades across sex
+ggplot(data = combined_data, aes(x = sex, y = G3.y, fill = sex)) + 
+  geom_boxplot() + 
+  geom_jitter(width = 0.2, alpha = 0.5) + 
+  labs(
+    x = "Sex",
+    y = "Portuguese Exam Score", 
+    title = "Box Plots of Portuguese Class Final Grades",
+    subtitle = "In Portuguese Student Data"
+  ) + 
+  scale_fill_discrete("Sex")
+```
+
+Based on the side-by-side box plots, the median female had a slightly higher final grade in Portuguese than the median male. There also appear to be more very low performing males, with what appears to be eight males with a final grade of five or lower, and only two such females.
+
+```{r}
+# Math final grades across sex
+ggplot(data = combined_data, aes(x = sex, y = G3.x, fill = sex)) + 
+  geom_boxplot() + 
+  geom_jitter(width = 0.2, alpha = 0.5) + 
+  labs(
+    x = "Sex",
+    y = "Math Exam Score", 
+    title = "Box Plots of Math Class Final Grades",
+    subtitle = "In Portuguese Student Data"
+  ) + 
+  scale_fill_discrete("Sex")
+```
+
+Based on the side-by-side box plots, the median male final grade in math is slightly higher than the median final grade for females. There also appear to be more females who had a final grade of 0 than males.
+
+```{r}
+# scatterplots
+# create a scatter plot relating the G3 math scores to the ages of students
+ggplot(data = combined_data, aes(x = age, y = G3.x, color = sex)) + 
+  geom_jitter(width = 0.2) + # use jitter so you can see all the points
+  labs(
+    x = "Age",
+    y = "Math Class Final Gradee", 
+    title = "Scatterplot of Students' Age and Math Class Final Grade",
+    subtitle = "Grouped by Sex of the Student", 
+    color = "Sex"
+  )
+```
+
+There is no clear relationship between the age of students and their final math grade, as all age groups appear to have a similar distribution. There appears to be only one 22 year old, who significantly older than the next oldest students at 19 years old.
+
+```{r}
+# create a scatter plot relating the G3 math scores to the G1 math scores of students
+ggplot(data = combined_data, aes(x = G1.x, y = G3.x, color = sex)) + 
+  geom_jitter(width = 0.2) + # use jitter so you can see all the points
+  labs(
+    x = "Math Class First Period Grade",
+    y = "Math Class Final Grade", 
+    title = "Scatterplot of Math Class First Period and Final Grades",
+    subtitle = "Grouped by Sex of the Student", 
+    color = "Sex"
+  )
+```
+
+There is a strong positive trend in this scatter plot indicating that a high first period math grade is strongly correlated to a high final math grade. There appear to be a few scores of 0 for the final grade but none for the first period grade, indicating some people may have not completed the course.
+
+```{r}
+# scatter plots with faceting (same as the scatterplots above but faceted on the studytime variable)
+ggplot(data = combined_data, aes(x = age, y = G3.x, color = sex)) + 
+  geom_jitter(width = 0.2) + # use jitter so you can see all the points
+  labs(
+    x = "Age",
+    y = "Math Class Final Grade", 
+    title = "Scatterplot of Students' Age and Math Class Final Grade",
+    subtitle = "Grouped by Sex and Study Time of the Student", 
+    color = "Sex"
+  ) + 
+  facet_wrap(~ studytime)
+```
+
+It appears that younger students may study be more likely to study five hours or less, as the majority of points for students ages 15-17 appear to be in either the <2 hours or 2-5 hours level of study time.
+
+```{r}
+ggplot(data = combined_data, aes(x = G1.x, y = G3.x, color = sex)) + 
+  geom_jitter(width = 0.2) + # use jitter so you can see all the points
+  labs(
+    x = "Math Class First Period Grade",
+    y = "Math Class Final Grade", 
+    title = "Scatterplot of Math Class First Period and Final Grades",
+    subtitle = "Grouped by Sex and Study Time of the Student", 
+    color = "Sex"
+  ) + 
+  facet_wrap(~ studytime)
+```
+
+It appears that regardless of study time, a higher first period math grade is positively correlated with a higher final math grade.
+
+```{r}
+# scatter plots with another level of faceting
+ggplot(data = combined_data, aes(x = age, y = G3.x, color = sex)) + 
+  geom_jitter(width = 0.2) + # use jitter so you can see all the points
+  labs(
+    x = "Age",
+    y = "Math Class Final Grade", 
+    title = "Scatterplot of Students' Age and G3 Math Exam Score",
+    subtitle = "Grouped by Sex, Study Time and Romantic Status of the Student", 
+    color = "Sex"
+  ) + 
+  facet_grid(studytime ~ romantic)
+```
+
+Based on the grouped scatter plot, older students are more likely to have a romantic partner than younger students.
+
+```{r}
+ggplot(data = combined_data, aes(x = G1.x, y = G3.x, color = sex)) + 
+  geom_jitter(width = 0.2) + # use jitter so you can see all the points
+  labs(
+    x = "Math Class First Period Grade",
+    y = "Math Class Final Grade", 
+    title = "Scatterplot of Math Class First Period and Final Grades",
+    subtitle = "Grouped by Sex, Study Time and Romantic Status of the Student", 
+    color = "Sex"
+  ) + 
+  facet_grid(studytime ~ romantic)
+```
+
+Across all grouped of sex, relationship status, and study time per week, a higher first period math grade is positively correlated with a higher final math grade.
